@@ -2,20 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cotizador</title>
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <!-- Tu script -->
   <script defer src="script.js"></script>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Tu estilo -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Cotización</h1>
 
-  <label>N° Cotización: <input type="text" id="quoteNumber" required></label><br>
-  <label>Fecha: <input type="date" id="quoteDate"></label><br><br>
+  <label for="quoteNumber">N° Cotización:
+    <input type="text" id="quoteNumber" required />
+  </label><br>
+
+  <label for="quoteDate">Fecha:
+    <input type="date" id="quoteDate" />
+  </label><br><br>
 
   <table id="itemsTable" border="1">
     <thead>
-      <tr><th>#</th><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th><th></th></tr>
+      <tr>
+        <th>#</th>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -27,7 +46,6 @@
   <p>Total: <span id="total">0.00</span></p>
 
   <button onclick="guardarCotizacion()">Guardar Cotización</button>
-  <button id="downloadBtn" style="display:none;">Descargar PDF</button>
+  <button id="downloadBtn" style="display: none;">Descargar PDF</button>
 </body>
 </html>
-
