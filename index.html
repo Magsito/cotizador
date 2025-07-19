@@ -7,6 +7,10 @@
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- html2pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Script y estilos -->
   <script defer src="script.js"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -54,12 +58,15 @@
         <th>Fecha</th>
         <th>Total</th>
         <th>Ver</th>
-        <th>PDF</th> <!-- NUEVA COLUMNA -->
+        <th>PDF</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
   <div id="detalleCotizacion"></div>
+
+  <!-- Contenedor oculto para el PDF personalizado -->
+  <div id="pdfContainer" style="display:none;"></div>
 </body>
 </html>
