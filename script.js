@@ -1,3 +1,4 @@
+// Inicializar Supabase
 const supabaseClient = supabase.createClient(
   'https://kgwzjrpgmhjfaxvndfjm.supabase.co',
   'sb_publishable_VslI4Xb5L0ZECAmyA6ITyw_lwGg5uFn'
@@ -22,6 +23,7 @@ function addItem() {
   updateTotals();
 }
 
+// Calcular totales
 function updateTotals() {
   let subtotal = 0;
   document.querySelectorAll("#itemsTable tbody tr").forEach(row => {
@@ -39,6 +41,7 @@ function updateTotals() {
   document.getElementById("total").textContent = total.toFixed(2);
 }
 
+// Guardar cotización
 async function guardarCotizacion() {
   const quoteNumber = document.getElementById("quoteNumber").value;
   const date = document.getElementById("quoteDate").value || new Date().toISOString();
@@ -85,6 +88,7 @@ async function guardarCotizacion() {
   cargarCotizaciones();
 }
 
+// Cargar cotizaciones
 async function cargarCotizaciones() {
   const { data, error } = await supabaseClient
     .from('quotes')
@@ -112,6 +116,7 @@ async function cargarCotizaciones() {
   });
 }
 
+// Mostrar detalle de una cotización
 async function verDetalle(quoteId) {
   const { data: quote } = await supabaseClient
     .from('quotes')
@@ -125,13 +130,14 @@ async function verDetalle(quoteId) {
     .eq('quote_id', quoteId);
 
   const html = `
-    <div id="pdfCotizacion" style="padding: 20px; font-family: Arial;">
+    <div id="pdfCotizacion" style="padding: 24px; font-family: Arial, sans-serif;">
       <h2 style="text-align: center;">Cotización N° ${quote.quote_number}</h2>
       <p><strong>Fecha:</strong> ${quote.date.split('T')[0]}</p>
-      <table border="1" cellspacing="0" cellpadding="4" width="100%">
-        <thead>
+      <br>
+      <table border="1" cellspacing="0" cellpadding="6" width="100%" style="border-collapse: collapse; text-align: center;">
+        <thead style="background-color: #f0f0f0;">
           <tr>
-            <th>#</th><th>Descripción</th><th>Cantidad</th><th>Unitario</th><th>Total</th>
+            <th>#</th><th>Descripción</th><th>Cantidad</th><th>Unitario (S/)</th><th>Total (S/)</th>
           </tr>
         </thead>
         <tbody>
@@ -140,14 +146,15 @@ async function verDetalle(quoteId) {
               <td>${item.item_number}</td>
               <td>${item.description}</td>
               <td>${item.quantity}</td>
-              <td>${item.unit_price}</td>
-              <td>${item.total}</td>
+              <td>${item.unit_price.toFixed(2)}</td>
+              <td>${item.total.toFixed(2)}</td>
             </tr>`).join("")}
         </tbody>
       </table>
-      <p><strong>Subtotal:</strong> ${quote.subtotal.toFixed(2)}</p>
-      <p><strong>IGV:</strong> ${quote.igv.toFixed(2)}</p>
-      <p><strong>Total:</strong> ${quote.total.toFixed(2)}</p>
+      <br>
+      <p><strong>Subtotal:</strong> S/ ${quote.subtotal.toFixed(2)}</p>
+      <p><strong>IGV (18%):</strong> S/ ${quote.igv.toFixed(2)}</p>
+      <p><strong>Total:</strong> S/ ${quote.total.toFixed(2)}</p>
     </div>
   `;
 
@@ -155,6 +162,19 @@ async function verDetalle(quoteId) {
   document.getElementById("pdfContainer").innerHTML = html;
 }
 
+// Descargar PDF de cotización actual
+function generarPDF() {
+  const element = document.getElementById("pdfCotizacion");
+  html2pdf().from(element).set({
+    margin: 10,
+    filename: `Cotizacion-descargada.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).save();
+}
+
+// Descargar PDF desde lista de cotizaciones
 async function generarPDFDesdeId(id) {
   await verDetalle(id);
   const element = document.getElementById("pdfContainer");
@@ -167,18 +187,10 @@ async function generarPDFDesdeId(id) {
   }).save();
 }
 
-function generarPDF() {
-  const element = document.getElementById("pdfCotizacion");
-  html2pdf().from(element).set({
-    margin: 10,
-    filename: `Cotizacion-descargada.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).save();
-}
-
+// Cargar lista al inicio
 window.addEventListener("DOMContentLoaded", cargarCotizaciones);
+
+// Exportar funciones globales
 window.addItem = addItem;
 window.guardarCotizacion = guardarCotizacion;
 window.verDetalle = verDetalle;
