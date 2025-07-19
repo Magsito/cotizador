@@ -165,6 +165,8 @@ async function verDetalle(quoteId) {
 // Descargar PDF de cotización actual
 function generarPDF() {
   const element = document.getElementById("pdfCotizacion");
+  if (!element) return alert("No hay cotización para exportar");
+
   html2pdf().from(element).set({
     margin: 10,
     filename: `Cotizacion-descargada.pdf`,
@@ -177,14 +179,18 @@ function generarPDF() {
 // Descargar PDF desde lista de cotizaciones
 async function generarPDFDesdeId(id) {
   await verDetalle(id);
-  const element = document.getElementById("pdfContainer");
-  html2pdf().from(element).set({
-    margin: 10,
-    filename: `Cotizacion-${id}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).save();
+  setTimeout(() => {
+    const element = document.getElementById("pdfCotizacion");
+    if (!element) return alert("No se pudo generar el PDF");
+
+    html2pdf().from(element).set({
+      margin: 10,
+      filename: `Cotizacion-${id}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).save();
+  }, 300);
 }
 
 // Cargar lista al inicio
