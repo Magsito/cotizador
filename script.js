@@ -1,6 +1,8 @@
-const supabase = supabase.createClient(
-  'https://kgwzjrpgmhjfaxvndfjm.supabase.co', // ← pon tu URL
-  'sb_publishable_VslI4Xb5L0ZECAmyA6ITyw_lwGg5uFn'                    // ← pon tu API key
+// Corregido: usar createClient desde la librería
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  'https://kgwzjrpgmhjfaxvndfjm.supabase.co',
+  'sb_publishable_VslI4Xb5L0ZECAmyA6ITyw_lwGg5uFn'
 );
 
 // Agregar ítem a la tabla
@@ -49,7 +51,7 @@ async function guardarCotizacion() {
   const igv = parseFloat(document.getElementById("igv").textContent);
   const total = parseFloat(document.getElementById("total").textContent);
 
-  const { data: quote, error } = await supabase
+  const { data: quote, error } = await supabaseClient
     .from('quotes')
     .insert([{ quote_number: quoteNumber, date, subtotal, igv, total }])
     .select()
@@ -77,7 +79,7 @@ async function guardarCotizacion() {
     });
   });
 
-  const { error: itemError } = await supabase.from('quote_items').insert(items);
+  const { error: itemError } = await supabaseClient.from('quote_items').insert(items);
   if (itemError) {
     alert("Error al guardar ítems: " + itemError.message);
     return;
