@@ -88,3 +88,6 @@ async function guardarCotizacion() {
   alert("Cotización guardada con éxito ✅");
   document.getElementById("downloadBtn").style.display = "inline";
 }
+
+window.addItem = addItem;
+window.guardarCotizacion = guardarCotizacion;
