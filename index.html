@@ -6,8 +6,10 @@
   <title>Cotizador</title>
 
   <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- Tu script principal -->
   <script defer src="script.js"></script>
+  <!-- Estilos opcionales -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -59,6 +61,10 @@
     <tbody></tbody>
   </table>
 
-  <div id="detalleCotizacion"></div>
+  <hr>
+
+  <div id="detalleCotizacion">
+    <!-- Aquí se muestra el detalle de una cotización seleccionada -->
+  </div>
 </body>
 </html>
