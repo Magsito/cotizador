@@ -1,6 +1,5 @@
-// Corregido: usar createClient desde la librería
-const { createClient } = supabase;
-const supabaseClient = createClient(
+// Inicializar Supabase correctamente
+const supabaseClient = supabase.createClient(
   'https://kgwzjrpgmhjfaxvndfjm.supabase.co',
   'sb_publishable_VslI4Xb5L0ZECAmyA6ITyw_lwGg5uFn'
 );
@@ -89,5 +88,6 @@ async function guardarCotizacion() {
   document.getElementById("downloadBtn").style.display = "inline";
 }
 
+// Hacer accesibles las funciones al HTML
 window.addItem = addItem;
 window.guardarCotizacion = guardarCotizacion;
