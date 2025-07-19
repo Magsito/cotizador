@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cotizador</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Cotización</h1>
+
+  <label>N° Cotización: <input type="text" id="quoteNumber" required></label><br>
+  <label>Fecha: <input type="date" id="quoteDate"></label><br><br>
+
+  <table id="itemsTable" border="1">
+    <thead>
+      <tr><th>#</th><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th><th></th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <button onclick="addItem()">Agregar ítem</button><br><br>
+
+  <p>Subtotal: <span id="subtotal">0.00</span></p>
+  <p>IGV (18%): <span id="igv">0.00</span></p>
+  <p>Total: <span id="total">0.00</span></p>
+
+  <button onclick="guardarCotizacion()">Guardar Cotización</button>
+  <button id="downloadBtn" style="display:none;">Descargar PDF</button>
+</body>
+</html>
 
