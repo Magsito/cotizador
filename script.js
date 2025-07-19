@@ -1,4 +1,3 @@
-// Supabase config
 const supabaseClient = supabase.createClient(
   'https://kgwzjrpgmhjfaxvndfjm.supabase.co',
   'sb_publishable_VslI4Xb5L0ZECAmyA6ITyw_lwGg5uFn'
@@ -18,13 +17,11 @@ function addItem() {
     <td class="itemTotal">0.00</td>
     <td><button onclick="this.closest('tr').remove(); updateTotals();">🗑️</button></td>
   `;
-
   tbody.appendChild(row);
   row.querySelectorAll("input").forEach(i => i.addEventListener("input", updateTotals));
   updateTotals();
 }
 
-// Calcular totales
 function updateTotals() {
   let subtotal = 0;
   document.querySelectorAll("#itemsTable tbody tr").forEach(row => {
@@ -42,7 +39,6 @@ function updateTotals() {
   document.getElementById("total").textContent = total.toFixed(2);
 }
 
-// Guardar cotización
 async function guardarCotizacion() {
   const quoteNumber = document.getElementById("quoteNumber").value;
   const date = document.getElementById("quoteDate").value || new Date().toISOString();
@@ -86,10 +82,9 @@ async function guardarCotizacion() {
 
   alert("Cotización guardada con éxito ✅");
   document.getElementById("downloadBtn").style.display = "inline";
-  cargarCotizaciones(); // recargar lista
+  cargarCotizaciones();
 }
 
-// Cargar cotizaciones guardadas
 async function cargarCotizaciones() {
   const { data, error } = await supabaseClient
     .from('quotes')
@@ -117,34 +112,23 @@ async function cargarCotizaciones() {
   });
 }
 
-// Ver detalle y generar PDF si se solicita
-async function verDetalle(quoteId, autoPDF = false) {
-  const { data: quote, error: err1 } = await supabaseClient
+async function verDetalle(quoteId) {
+  const { data: quote } = await supabaseClient
     .from('quotes')
     .select('*')
     .eq('id', quoteId)
     .single();
 
-  const { data: items, error: err2 } = await supabaseClient
+  const { data: items } = await supabaseClient
     .from('quote_items')
     .select('*')
     .eq('quote_id', quoteId);
 
-  if (err1 || err2) {
-    alert("Error al cargar el detalle");
-    return;
-  }
-
-  const container = document.getElementById("detalleCotizacion");
-  container.innerHTML = `
-    <div id="pdfCotizacion">
-      <h3>Detalle de Cotización</h3>
-      <p><strong>N°:</strong> ${quote.quote_number}</p>
+  const html = `
+    <div id="pdfCotizacion" style="padding: 20px; font-family: Arial;">
+      <h2 style="text-align: center;">Cotización N° ${quote.quote_number}</h2>
       <p><strong>Fecha:</strong> ${quote.date.split('T')[0]}</p>
-      <p><strong>Subtotal:</strong> ${quote.subtotal.toFixed(2)}</p>
-      <p><strong>IGV:</strong> ${quote.igv.toFixed(2)}</p>
-      <p><strong>Total:</strong> ${quote.total.toFixed(2)}</p>
-      <table border="1">
+      <table border="1" cellspacing="0" cellpadding="4" width="100%">
         <thead>
           <tr>
             <th>#</th><th>Descripción</th><th>Cantidad</th><th>Unitario</th><th>Total</th>
@@ -158,42 +142,43 @@ async function verDetalle(quoteId, autoPDF = false) {
               <td>${item.quantity}</td>
               <td>${item.unit_price}</td>
               <td>${item.total}</td>
-            </tr>
-          `).join("")}
+            </tr>`).join("")}
         </tbody>
       </table>
+      <p><strong>Subtotal:</strong> ${quote.subtotal.toFixed(2)}</p>
+      <p><strong>IGV:</strong> ${quote.igv.toFixed(2)}</p>
+      <p><strong>Total:</strong> ${quote.total.toFixed(2)}</p>
     </div>
   `;
 
-  if (autoPDF) {
-    setTimeout(() => {
-      const printContents = document.getElementById("pdfCotizacion").innerHTML;
-      const win = window.open('', '', 'width=800,height=700');
-      win.document.write(`<html><head><title>Cotización PDF</title></head><body>${printContents}</body></html>`);
-      win.document.close();
-      win.print();
-    }, 300);
-  }
+  document.getElementById("detalleCotizacion").innerHTML = html;
+  document.getElementById("pdfContainer").innerHTML = html;
 }
 
-// PDF de cotización activa
+async function generarPDFDesdeId(id) {
+  await verDetalle(id);
+  const element = document.getElementById("pdfContainer");
+  html2pdf().from(element).set({
+    margin: 10,
+    filename: `Cotizacion-${id}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).save();
+}
+
 function generarPDF() {
-  const printContents = document.getElementById("pdfCotizacion").innerHTML;
-  const win = window.open('', '', 'width=800,height=700');
-  win.document.write(`<html><head><title>Cotización PDF</title></head><body>${printContents}</body></html>`);
-  win.document.close();
-  win.print();
+  const element = document.getElementById("pdfCotizacion");
+  html2pdf().from(element).set({
+    margin: 10,
+    filename: `Cotizacion-descargada.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).save();
 }
 
-// Generar PDF desde lista
-function generarPDFDesdeId(id) {
-  verDetalle(id, true);
-}
-
-// Cargar cotizaciones al inicio
 window.addEventListener("DOMContentLoaded", cargarCotizaciones);
-
-// Exportar funciones globales
 window.addItem = addItem;
 window.guardarCotizacion = guardarCotizacion;
 window.verDetalle = verDetalle;
