@@ -1,63 +1,112 @@
 body {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #f8f9fa;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f8;
   color: #333;
 }
 
-h1 {
+main {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+h1, h2 {
   text-align: center;
-  color: #222;
+  color: #004080;
 }
 
 label {
   display: block;
-  margin: 10px 0;
+  margin: 12px 0 6px;
+  font-weight: 600;
 }
 
 input[type="text"],
-input[type="date"],
-input[type="number"] {
-  padding: 6px;
+input[type="number"],
+input[type="date"] {
+  padding: 8px;
   width: 100%;
   max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
   box-sizing: border-box;
-  margin-top: 4px;
+}
+
+input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin: 8px 4px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #005fa3;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #fff;
+  margin-top: 12px;
+  font-size: 14px;
 }
 
-table th, table td {
+th, td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 8px 10px;
   text-align: center;
 }
 
-button {
-  margin-top: 15px;
-  padding: 10px 15px;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
+th {
+  background-color: #e9f0f7;
+  font-weight: bold;
+  color: #004080;
 }
 
-button:hover {
-  background-color: #0056b3;
+td input[type="text"],
+td input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-#downloadBtn {
-  background-color: #28a745;
+#detalleCotizacion {
+  margin-top: 30px;
 }
 
-#downloadBtn:hover {
-  background-color: #1e7e34;
+#pdfCotizacion {
+  font-family: Arial, sans-serif;
+}
+
+@media screen and (max-width: 600px) {
+  main {
+    padding: 20px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"] {
+    width: 100%;
+  }
+
+  table, thead, tbody, th, td, tr {
+    font-size: 12px;
+  }
+
+  button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
