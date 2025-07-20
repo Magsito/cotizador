@@ -111,9 +111,23 @@ async function cargarCotizaciones() {
       <td>${q.total.toFixed(2)}</td>
       <td><button onclick="verDetalle('${q.id}')">🔍</button></td>
       <td><button onclick="generarPDFDesdeId('${q.id}')">📄</button></td>
+      <td><button onclick="eliminarCotizacion('${q.id}')">🗑️</button></td>
     `;
     tbody.appendChild(row);
   });
+}
+
+// Eliminar cotización
+async function eliminarCotizacion(id) {
+  const confirmar = confirm("¿Estás seguro de eliminar esta cotización?");
+  if (!confirmar) return;
+
+  await supabaseClient.from('quote_items').delete().eq('quote_id', id);
+  await supabaseClient.from('quotes').delete().eq('id', id);
+
+  alert("Cotización eliminada ✅");
+  cargarCotizaciones();
+  document.getElementById("detalleCotizacion").innerHTML = "";
 }
 
 // Mostrar detalle de una cotización
@@ -202,3 +216,4 @@ window.guardarCotizacion = guardarCotizacion;
 window.verDetalle = verDetalle;
 window.generarPDF = generarPDF;
 window.generarPDFDesdeId = generarPDFDesdeId;
+window.eliminarCotizacion = eliminarCotizacion;
