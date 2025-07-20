@@ -29,16 +29,16 @@
       <input type="date" id="quoteDate" />
     </label><br><br>
 
-    <!-- ✅ Casilla de metraje -->
+    <!-- ✅ Casilla para activar metraje -->
     <label>
       <input type="checkbox" id="modoMetraje" onchange="alternarModoMetraje()" />
       Cotización con metraje
     </label><br><br>
 
-    <!-- ✅ Tabla de ítems -->
     <table id="itemsTable" border="1" cellpadding="4" cellspacing="0">
       <thead>
         <tr>
+          <!-- Esta cabecera se reemplaza dinámicamente según el modo -->
           <th>#</th>
           <th>Descripción</th>
           <th>Cantidad</th>
