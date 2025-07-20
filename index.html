@@ -44,7 +44,6 @@
     <table id="itemsTable" border="1" cellpadding="4" cellspacing="0">
       <thead>
         <tr>
-          <!-- Esta cabecera se reemplaza dinámicamente según el modo -->
           <th>#</th>
           <th>Descripción</th>
           <th>Cantidad</th>
@@ -63,12 +62,14 @@
     <p>Total: <span id="total">0.00</span></p>
 
     <button onclick="guardarCotizacion()">Guardar Cotización</button>
-    <button id="downloadBtn" style="display: none;" onclick="generarPDF()">Descargar PDF</button>
+
+    <!-- ✅ Eliminamos la función inexistente generarPDF() -->
+    <button id="downloadBtn" style="display: none;">Descargar PDF</button>
 
     <hr>
 
     <h2>Cotizaciones guardadas</h2>
-    <table id="listaCotizaciones" border="1" cellpadding="4" cellspacing="0">
+    <table id="cotizacionesGuardadas" border="1" cellpadding="4" cellspacing="0">
       <thead>
         <tr>
           <th>N°</th>
