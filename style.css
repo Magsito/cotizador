@@ -1,28 +1,29 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f6f8;
-  color: #333;
+  background-color: #0A1128;
+  color: #A9B4DC;
 }
 
 main {
   max-width: 900px;
   margin: 30px auto;
   padding: 30px;
-  background-color: #fff;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  background-color: #0A1128;
+  border: 2px solid #A9B4DC;
   border-radius: 12px;
 }
 
 h1, h2 {
   text-align: center;
-  color: #004080;
+  color: #A9B4DC;
 }
 
 label {
   display: block;
   margin: 12px 0 6px;
   font-weight: 600;
+  color: #A9B4DC;
 }
 
 input[type="text"],
@@ -31,9 +32,11 @@ input[type="date"] {
   padding: 8px;
   width: 100%;
   max-width: 300px;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
+  color: #000;
   box-sizing: border-box;
 }
 
@@ -42,8 +45,8 @@ input[type="checkbox"] {
 }
 
 button {
-  background-color: #007acc;
-  color: white;
+  background-color: #A9B4DC;
+  color: #0A1128;
   border: none;
   padding: 10px 16px;
   margin: 8px 4px;
@@ -54,7 +57,7 @@ button {
 }
 
 button:hover {
-  background-color: #005fa3;
+  background-color: #7f8dbd;
 }
 
 table {
@@ -62,18 +65,18 @@ table {
   border-collapse: collapse;
   margin-top: 12px;
   font-size: 14px;
+  color: #A9B4DC;
 }
 
 th, td {
-  border: 1px solid #ccc;
+  border: 1px solid #A9B4DC;
   padding: 8px 10px;
   text-align: center;
 }
 
 th {
-  background-color: #e9f0f7;
+  background-color: #162039;
   font-weight: bold;
-  color: #004080;
 }
 
 td input[type="text"],
@@ -88,6 +91,7 @@ td input[type="number"] {
 
 #pdfCotizacion {
   font-family: Arial, sans-serif;
+  color: #000;
 }
 
 @media screen and (max-width: 600px) {
