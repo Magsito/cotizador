@@ -203,6 +203,7 @@ async function cargarCotizaciones() {
 }
 
 async function verDetalle(id) {
+  ultimoIdCargado = id;
   const { data: quote } = await supabaseClient.from('quotes').select('*').eq('id', id).single();
   const { data: items } = await supabaseClient.from('quote_items').select('*').eq('quote_id', id);
 
@@ -269,3 +270,15 @@ window.verDetalle = verDetalle;
 window.generarPDF = generarPDF;
 window.generarPDFDesdeId = generarPDFDesdeId;
 window.eliminarCotizacion = eliminarCotizacion;
+
+// Guardar el último ID cargado con "verDetalle"
+let ultimoIdCargado = null;
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  if (ultimoIdCargado !== null) {
+    generarPDFDesdeId(ultimoIdCargado);
+  } else {
+    alert("Primero visualiza una cotización guardada.");
+  }
+});
+
