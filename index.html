@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -29,9 +29,15 @@
       <input type="date" id="quoteDate" />
     </label><br><br>
 
+    <!-- ✅ Casilla de metraje -->
+    <label>
+      <input type="checkbox" id="modoMetraje" onchange="alternarModoMetraje()" />
+      Cotización con metraje
+    </label><br><br>
+
     <table id="itemsTable" border="1" cellpadding="4" cellspacing="0">
       <thead>
-        <tr>
+        <tr id="cabeceraNormal">
           <th>#</th>
           <th>Descripción</th>
           <th>Cantidad</th>
@@ -39,6 +45,7 @@
           <th>Total</th>
           <th></th>
         </tr>
+        <!-- Cabecera alternativa (se mostrará desde JS si se usa metraje) -->
       </thead>
       <tbody></tbody>
     </table>
