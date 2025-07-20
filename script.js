@@ -1,3 +1,5 @@
+let ultimoIdCargado = null;
+
 // Inicializar Supabase
 const supabaseClient = supabase.createClient(
   'https://kgwzjrpgmhjfaxvndfjm.supabase.co',
@@ -180,7 +182,7 @@ async function cargarCotizaciones() {
     .select('*')
     .order('quote_number', { ascending: true });
 
-  const tbody = document.querySelector("#listaCotizaciones tbody");  // <-- CORREGIDO
+  const tbody = document.querySelector("#cotizacionesGuardadas tbody");
   tbody.innerHTML = "";
 
   if (error) {
@@ -267,7 +269,6 @@ window.guardarCotizacion = guardarCotizacion;
 // Agregar funciones faltantes
 window.cargarCotizaciones = cargarCotizaciones;
 window.verDetalle = verDetalle;
-window.generarPDF = generarPDF;
 window.generarPDFDesdeId = generarPDFDesdeId;
 window.eliminarCotizacion = eliminarCotizacion;
 
