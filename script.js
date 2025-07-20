@@ -179,3 +179,10 @@ window.addItem = addItem;
 window.updateTotals = updateTotals;
 window.alternarModoMetraje = alternarModoMetraje;
 window.guardarCotizacion = guardarCotizacion;
+
+// Agregar funciones faltantes
+window.cargarCotizaciones = cargarCotizaciones;
+window.verDetalle = verDetalle;
+window.generarPDF = generarPDF;
+window.generarPDFDesdeId = generarPDFDesdeId;
+window.eliminarCotizacion = eliminarCotizacion;
