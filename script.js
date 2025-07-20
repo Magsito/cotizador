@@ -107,7 +107,75 @@ function updateTotals() {
   document.getElementById("total").textContent = total.toFixed(2);
 }
 
+// Guardar cotización (adaptada para modo normal y metraje)
+async function guardarCotizacion() {
+  const quoteNumber = document.getElementById("quoteNumber").value;
+  const date = document.getElementById("quoteDate").value || new Date().toISOString();
+  const subtotal = parseFloat(document.getElementById("subtotal").textContent);
+  const igv = parseFloat(document.getElementById("igv").textContent);
+  const total = parseFloat(document.getElementById("total").textContent);
+  const modoMetraje = document.getElementById("modoMetraje")?.checked;
+
+  const { data: quote, error } = await supabaseClient
+    .from('quotes')
+    .insert([{ quote_number: quoteNumber, date, subtotal, igv, total }])
+    .select()
+    .single();
+
+  if (error) {
+    alert("Error al guardar cotización: " + error.message);
+    return;
+  }
+
+  const quoteId = quote.id;
+  const items = [];
+
+  document.querySelectorAll("#itemsTable tbody tr").forEach((row, i) => {
+    const desc = row.querySelector(".desc")?.value || "";
+    if (modoMetraje) {
+      const largo = parseFloat(row.querySelector(".largo")?.value) || 0;
+      const alto = parseFloat(row.querySelector(".alto")?.value) || 0;
+      const area = largo * alto;
+      const precioM2 = parseFloat(row.querySelector(".precioM2")?.value) || 0;
+      const total = area * precioM2;
+
+      items.push({
+        quote_id: quoteId,
+        item_number: i + 1,
+        description: desc + ` (${largo}m x ${alto}m)`,
+        quantity: area,
+        unit_price: precioM2,
+        total: total
+      });
+    } else {
+      const qty = parseFloat(row.querySelector(".qty")?.value) || 0;
+      const unit = parseFloat(row.querySelector(".unit")?.value) || 0;
+      const total = qty * unit;
+
+      items.push({
+        quote_id: quoteId,
+        item_number: i + 1,
+        description: desc,
+        quantity: qty,
+        unit_price: unit,
+        total: total
+      });
+    }
+  });
+
+  const { error: itemError } = await supabaseClient.from('quote_items').insert(items);
+  if (itemError) {
+    alert("Error al guardar ítems: " + itemError.message);
+    return;
+  }
+
+  alert("Cotización guardada con éxito ✅");
+  document.getElementById("downloadBtn").style.display = "inline";
+  cargarCotizaciones();
+}
+
 // Exportar funciones globales
 window.addItem = addItem;
 window.updateTotals = updateTotals;
 window.alternarModoMetraje = alternarModoMetraje;
+window.guardarCotizacion = guardarCotizacion;
