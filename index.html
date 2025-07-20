@@ -4,57 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cotizador</title>
+
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <!-- html2pdf.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script defer src="script.js"></script>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <h1>Cotización</h1>
+<body style="background-color: #0A1128; color: #A9B4DC;">
+  <main style="padding: 20px; background-color: #0A1128;">
 
-  <label>N°:
-    <input type="text" id="quoteNumber" />
-  </label>
-  <label>Fecha:
-    <input type="date" id="quoteDate" />
-  </label>
+    <div style="text-align: center;">
+      <img src="Diseño sin título.png" alt="Logo Luthiplast" style="max-width: 150px; margin-bottom: 10px;" />
+    </div>
 
-  <table id="itemsTable" border="1">
-    <thead>
-      <tr>
-        <th>Descripción</th>
-        <th>Cantidad</th>
-        <th>Precio Unitario</th>
-        <th>Total</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <h1 style="color: #A9B4DC;">Cotización</h1>
 
-  <button onclick="addItem()">Agregar ítem</button>
+    <label for="quoteNumber">N° Cotización:
+      <input type="text" id="quoteNumber" required />
+    </label><br>
 
-  <p>Subtotal: <span id="subtotal">0.00</span></p>
-  <p>IGV: <span id="igv">0.00</span></p>
-  <p>Total: <span id="total">0.00</span></p>
+    <label for="quoteDate">Fecha:
+      <input type="date" id="quoteDate" />
+    </label><br><br>
 
-  <button onclick="guardarCotizacion()">Guardar Cotización</button>
-  <button id="downloadBtn">Descargar PDF</button>
+    <label>
+      <input type="checkbox" id="modoMetraje" />
+      Cotización con metraje
+    </label><br><br>
 
-  <h2>Cotizaciones Guardadas</h2>
-  <table id="listaCotizaciones" border="1">
-    <thead>
-      <tr>
-        <th>N°</th>
-        <th>Fecha</th>
-        <th>Total</th>
-        <th>👁️</th>
-        <th>📄</th>
-        <th>🗑️</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <table id="itemsTable" border="1" cellpadding="4" cellspacing="0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-  <div id="detalleCotizacion" style="display:none;"></div>
+    <button id="addItemBtn">Agregar ítem</button><br><br>
+
+    <p>Subtotal: <span id="subtotal">0.00</span></p>
+    <p>IGV (18%): <span id="igv">0.00</span></p>
+    <p>Total: <span id="total">0.00</span></p>
+
+    <button id="guardarBtn">Guardar Cotización</button>
+    <button id="downloadBtn" style="display: none;">Descargar PDF</button>
+
+    <hr>
+
+    <h2>Cotizaciones guardadas</h2>
+    <table id="cotizacionesGuardadas" border="1" cellpadding="4" cellspacing="0">
+  <thead>
+    <tr>
+      <th>N°</th>
+      <th>Fecha</th>
+      <th>Total</th>
+      <th>Ver</th>
+      <th>PDF</th>
+      <th>Eliminar</th>
+    </tr>
+  </thead>
+  <tbody></tbody> <!-- Esta parte es CRUCIAL -->
+</table>
+
+    <div id="detalleCotizacion" style="margin-top: 20px;"></div>
+    <div id="pdfContainer" style="display: none;"></div>
+  </main>
+
+  <!-- Script al final para asegurar carga del DOM -->
+  <script src="script.js"></script>
 </body>
 </html>
+
