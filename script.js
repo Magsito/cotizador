@@ -174,6 +174,89 @@ async function guardarCotizacion() {
   cargarCotizaciones();
 }
 
+async function cargarCotizaciones() {
+  const { data: cotizaciones, error } = await supabaseClient
+    .from('quotes')
+    .select('*')
+    .order('quote_number', { ascending: true });
+
+  const tbody = document.querySelector("#cotizacionesGuardadas");
+  tbody.innerHTML = "";
+
+  if (error) {
+    console.error("Error al cargar cotizaciones:", error);
+    return;
+  }
+
+  cotizaciones.forEach(c => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${c.quote_number}</td>
+      <td>${new Date(c.date).toLocaleDateString()}</td>
+      <td>${c.total.toFixed(2)}</td>
+      <td><button onclick="verDetalle(${c.id})">👁️</button></td>
+      <td><button onclick="generarPDFDesdeId(${c.id})">📄</button></td>
+      <td><button onclick="eliminarCotizacion(${c.id})">🗑️</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function verDetalle(id) {
+  const { data: quote } = await supabaseClient.from('quotes').select('*').eq('id', id).single();
+  const { data: items } = await supabaseClient.from('quote_items').select('*').eq('quote_id', id);
+
+  document.getElementById("quoteNumber").value = quote.quote_number;
+  document.getElementById("quoteDate").value = quote.date.split("T")[0];
+  document.getElementById("modoMetraje").checked = false;
+  alternarModoMetraje();
+
+  const tbody = document.querySelector("#itemsTable tbody");
+  tbody.innerHTML = "";
+
+  items.forEach((item, i) => {
+    addItem();
+    const row = tbody.rows[i];
+    row.querySelector(".desc").value = item.description;
+    row.querySelector(".qty").value = item.quantity;
+    row.querySelector(".unit").value = item.unit_price;
+  });
+
+  updateTotals();
+}
+
+async function generarPDFDesdeId(id) {
+  const { data: quote } = await supabaseClient.from('quotes').select('*').eq('id', id).single();
+  const { data: items } = await supabaseClient.from('quote_items').select('*').eq('quote_id', id);
+
+  const win = window.open('', '_blank');
+  win.document.write('<html><head><title>Cotización</title></head><body>');
+  win.document.write(`<h1>Cotización #${quote.quote_number}</h1>`);
+  win.document.write(`<p>Fecha: ${new Date(quote.date).toLocaleDateString()}</p>`);
+  win.document.write('<table border="1" cellpadding="5" cellspacing="0"><tr><th>#</th><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th></tr>');
+
+  items.forEach((item, i) => {
+    win.document.write(`<tr><td>${i + 1}</td><td>${item.description}</td><td>${item.quantity}</td><td>${item.unit_price}</td><td>${item.total}</td></tr>`);
+  });
+
+  win.document.write('</table>');
+  win.document.write(`<p>Subtotal: ${quote.subtotal}</p>`);
+  win.document.write(`<p>IGV: ${quote.igv}</p>`);
+  win.document.write(`<p><strong>Total: ${quote.total}</strong></p>`);
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
+}
+
+async function eliminarCotizacion(id) {
+  if (!confirm("¿Seguro que deseas eliminar esta cotización?")) return;
+
+  await supabaseClient.from('quote_items').delete().eq('quote_id', id);
+  await supabaseClient.from('quotes').delete().eq('id', id);
+
+  cargarCotizaciones();
+}
+
 // Exportar funciones globales
 window.addItem = addItem;
 window.updateTotals = updateTotals;
