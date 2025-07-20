@@ -180,7 +180,7 @@ async function cargarCotizaciones() {
     .select('*')
     .order('quote_number', { ascending: true });
 
-  const tbody = document.querySelector("#cotizacionesGuardadas");
+  const tbody = document.querySelector("#listaCotizaciones tbody");  // <-- CORREGIDO
   tbody.innerHTML = "";
 
   if (error) {
@@ -282,3 +282,5 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   }
 });
 
+// Ejecutar al cargar la página
+document.addEventListener("DOMContentLoaded", cargarCotizaciones);
